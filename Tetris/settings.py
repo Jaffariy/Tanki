@@ -1,10 +1,12 @@
 import pygame
 import sys
 import imageio
+from config import load_config, save_config
 
 pygame.init()
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+TRANSPARENT = (0, 0, 0, 0)
 GREY = (200, 200, 200)
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -30,6 +32,55 @@ class Button:
         text_rect = text_surface.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
         screen.blit(text_surface, text_rect)
 
+
+def edit_profile_name():
+    config = load_config()
+    name = config["profile_name"]
+    typing = True
+    typing_box = pygame.Rect(100, HEIGHT // 2 - 25, 600, 50)
+    while typing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    typing = False
+                elif event.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
+                else:
+                    name += event.unicode
+
+        screen.fill(BLACK)
+        pygame.draw.rect(screen, WHITE, typing_box, 2)
+        edit_name_text = font.render("Edit Name: " + name, True, WHITE)
+        screen.blit(edit_name_text, (typing_box.x + 5, typing_box.y + 5))
+        pygame.display.flip()
+
+    config["profile_name"] = name
+    save_config(config)
+
+
+def view_profile_stats():
+    config = load_config()
+    running_stats = True
+
+    while running_stats:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                running_stats = False
+
+        screen.fill(BLACK)
+        stats_box = pygame.Rect(100, HEIGHT // 2 - 100, 600, 200)
+        pygame.draw.rect(screen, WHITE, stats_box, 2)
+        name_text = font.render("Name: " + config["profile_name"], True, WHITE)
+        high_score_text = font.render("High Score: " + str(config["high_score"]), True, WHITE)
+        screen.blit(name_text, (100, HEIGHT // 2))
+        screen.blit(high_score_text, (100, HEIGHT // 2 + 40))
+        pygame.display.flip()
 
 class Slider:
     def __init__(self, x, y, w, h, min_val, max_val, init_val, step):
@@ -67,8 +118,10 @@ class Slider:
     def getValue(self):
         return self.val
 
+edit_name_button = Button("Edit Name", WIDTH // 2 - 100, 300)
+stats_button = Button("View Stats", WIDTH // 2 - 100, 360)
 
-settings_text = font.render("Adjust speed(min: 0.5, max: 2.0)", True, WHITE)
+settings_text = font.render(f"Adjust speed(min: 0.5, max: 2.0)", True, WHITE)
 settings_rect = settings_text.get_rect(center=(WIDTH // 2, 150))
 slider = Slider(300, 200, 200, 30, 0.5, 2.0, FALL_SPEED, 0.1)
 
@@ -99,6 +152,12 @@ while running:
             if back_button.x < mouse_x < back_button.x + back_button.width and \
                     back_button.y < mouse_y < back_button.y + back_button.height:
                 exec(open("main.py").read())
+            if edit_name_button.x < mouse_x < edit_name_button.x + edit_name_button.width and \
+                    edit_name_button.y < mouse_y < edit_name_button.y + edit_name_button.height:
+                edit_profile_name()
+            elif stats_button.x < mouse_x < stats_button.x + stats_button.width and \
+                    stats_button.y < mouse_y < stats_button.y + stats_button.height:
+                view_profile_stats()
 
         slider.update(event)
 
@@ -106,6 +165,8 @@ while running:
     screen.blit(frames[current_frame], (0, 0))
     current_frame = (current_frame + 1) % total_frames
     back_button.draw()
+    edit_name_button.draw()
+    stats_button.draw()
     slider.draw()
     screen.blit(about_text, about_rect)
     screen.blit(authors_text, authors_rect)

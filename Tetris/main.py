@@ -1,6 +1,7 @@
 import pygame
 import sys
 import imageio
+from config import load_config, save_config
 
 pygame.init()
 WHITE = (255, 255, 255)
@@ -26,6 +27,31 @@ class Button:
         text_rect = text_surface.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
         screen.blit(text_surface, text_rect)
 
+def prompt_for_profile_name():
+    name = ""
+    typing_box = pygame.Rect(100, HEIGHT // 2 - 25, 600, 50)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN and name.strip():
+                    return name.strip()
+                elif event.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
+                else:
+                    name += event.unicode
+        screen.fill(BLACK)
+        pygame.draw.rect(screen, WHITE, typing_box, 2)
+        enter_name_text = font.render("Enter your profile name: " + name, True, WHITE)
+        screen.blit(enter_name_text, (typing_box.x + 5, typing_box.y + 5))
+        pygame.display.flip()
+
+config = load_config()
+if config["profile_name"] == "":
+    config["profile_name"] = prompt_for_profile_name()
+    save_config(config)
 
 start_button = Button("Start game!", WIDTH // 2 - 100, 200)
 settings_button = Button("Settings", WIDTH // 2 - 100, 300)

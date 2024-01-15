@@ -1,12 +1,13 @@
 import json
 
 DEFAULT_CONFIG = {
+    "profile_name": "",
     "high_score": 0,
     "achievements": {
-        "Lose 1 game": False,
-        "Lose 10 games": False,
-        "Win 1 game": False,
-        "Win 10 games": False,
+        "Lose 1 game": True,
+        "Lose 10 games": True,
+        "Win 1 game": True,
+        "Win 10 games": True,
     }
 }
 
