@@ -3,12 +3,15 @@ import json
 DEFAULT_CONFIG = {
     "profile_name": "",
     "high_score": 0,
+    "loses_count": 0,
+    "fall_speed": 1,
     "achievements": {
-        "Lose 1 game": True,
-        "Lose 10 games": True,
-        "Win 1 game": True,
-        "Win 10 games": True,
+        "Lose 1 game": False,
+        "Lose 10 games": False,
+        "Get 1000 score": False,
+        "Get 5000 score": False,
     }
+
 }
 
 def load_config():

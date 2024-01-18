@@ -12,8 +12,8 @@ WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Settings menu")
 font = pygame.font.Font(None, 36)
-
-FALL_SPEED = 1.0
+config = load_config()
+FALL_SPEED = config['fall_speed']
 
 
 class Button:
@@ -78,8 +78,10 @@ def view_profile_stats():
         pygame.draw.rect(screen, WHITE, stats_box, 2)
         name_text = font.render("Name: " + config["profile_name"], True, WHITE)
         high_score_text = font.render("High Score: " + str(config["high_score"]), True, WHITE)
-        screen.blit(name_text, (100, HEIGHT // 2))
-        screen.blit(high_score_text, (100, HEIGHT // 2 + 40))
+        loss_count = font.render("Loss count: " + str(config["loses_count"]), True, WHITE)
+        screen.blit(name_text, (100, HEIGHT // 3))
+        screen.blit(high_score_text, (100, HEIGHT // 2))
+        screen.blit(loss_count, (100, HEIGHT // 2 + 40))
         pygame.display.flip()
 
 class Slider:
@@ -120,10 +122,11 @@ class Slider:
 
 edit_name_button = Button("Edit Name", WIDTH // 2 - 100, 300)
 stats_button = Button("View Stats", WIDTH // 2 - 100, 360)
+save_speed = Button("Save speed", WIDTH // 2 - 100, 240)
 
 settings_text = font.render(f"Adjust speed(min: 0.5, max: 2.0)", True, WHITE)
 settings_rect = settings_text.get_rect(center=(WIDTH // 2, 150))
-slider = Slider(300, 200, 200, 30, 0.5, 2.0, FALL_SPEED, 0.1)
+slider = Slider(300, 200, 200, 30, 0.1, 1.0, FALL_SPEED, 0.1)
 
 about_text = font.render("About developers:", True, WHITE)
 about_rect = about_text.get_rect(center=(WIDTH // 2, 420))
@@ -158,6 +161,12 @@ while running:
             elif stats_button.x < mouse_x < stats_button.x + stats_button.width and \
                     stats_button.y < mouse_y < stats_button.y + stats_button.height:
                 view_profile_stats()
+            elif save_speed.x < mouse_x < save_speed.x + save_speed.width and \
+                    save_speed.y < mouse_y < save_speed.y + save_speed.height:
+                FALL_SPEED = slider.getValue()
+                config = load_config()
+                config['fall_speed'] = FALL_SPEED
+                save_config(config)
 
         slider.update(event)
 
@@ -167,6 +176,7 @@ while running:
     back_button.draw()
     edit_name_button.draw()
     stats_button.draw()
+    save_speed.draw()
     slider.draw()
     screen.blit(about_text, about_rect)
     screen.blit(authors_text, authors_rect)
@@ -175,7 +185,7 @@ while running:
     pygame.display.flip()
     clock.tick(30)
 
-FALL_SPEED = slider.getValue()
+
 
 pygame.quit()
 sys.exit()
