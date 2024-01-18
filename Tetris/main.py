@@ -11,6 +11,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Tetris main menu")
 font = pygame.font.Font(None, 36)
 
+
 class Button:
     def __init__(self, text, x, y):
         self.text = text
@@ -24,8 +25,11 @@ class Button:
         pygame.draw.rect(screen, BLACK, (self.x, self.y, self.width, self.height), 2)
 
         text_surface = font.render(self.text, True, BLACK)
-        text_rect = text_surface.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
+        text_rect = text_surface.get_rect(
+            center=(self.x + self.width // 2, self.y + self.height // 2)
+        )
         screen.blit(text_surface, text_rect)
+
 
 def prompt_for_profile_name():
     name = ""
@@ -47,6 +51,7 @@ def prompt_for_profile_name():
         enter_name_text = font.render("Enter your profile name: " + name, True, WHITE)
         screen.blit(enter_name_text, (typing_box.x + 5, typing_box.y + 5))
         pygame.display.flip()
+
 
 config = load_config()
 if config["profile_name"] == "":
@@ -74,14 +79,26 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            if achievements_button.x < mouse_x < achievements_button.x + achievements_button.width and \
-                    achievements_button.y < mouse_y < achievements_button.y + achievements_button.height:
+            if (
+                achievements_button.x
+                < mouse_x
+                < achievements_button.x + achievements_button.width
+                and achievements_button.y
+                < mouse_y
+                < achievements_button.y + achievements_button.height
+            ):
                 exec(open("achievements.py").read())
-            elif settings_button.x < mouse_x < settings_button.x + settings_button.width and \
-                    settings_button.y < mouse_y < settings_button.y + settings_button.height:
+            elif (
+                settings_button.x < mouse_x < settings_button.x + settings_button.width
+                and settings_button.y
+                < mouse_y
+                < settings_button.y + settings_button.height
+            ):
                 exec(open("settings.py").read())
-            elif start_button.x < mouse_x < start_button.x + start_button.width and \
-                    start_button.y < mouse_y < start_button.y + start_button.height:
+            elif (
+                start_button.x < mouse_x < start_button.x + start_button.width
+                and start_button.y < mouse_y < start_button.y + start_button.height
+            ):
                 exec(open("game.py").read())
 
     screen.fill(BLACK)

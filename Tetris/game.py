@@ -11,11 +11,11 @@ GRID_HEIGHT = WINDOW_HEIGHT // GRID_SIZE
 FPS = 10
 
 tetromino_colors = {
-    'S': (0, 255, 0),
-    'I': (0, 255, 255),
-    'T': (128, 0, 128),
-    'R': (255, 0, 0),
-    'L': (255, 165, 0)
+    "S": (0, 255, 0),
+    "I": (0, 255, 255),
+    "T": (128, 0, 128),
+    "R": (255, 0, 0),
+    "L": (255, 165, 0),
 }
 
 WHITE = (255, 255, 255)
@@ -42,84 +42,57 @@ class Tetromino:
         for y, row in enumerate(rotated_shape):
             for x, cell in enumerate(row):
                 if cell:
-                    pygame.draw.rect(surface, color, (self.x * cell_size + x * cell_size,
-                                                      self.y * cell_size + y * cell_size,
-                                                      cell_size, cell_size))
+                    pygame.draw.rect(
+                        surface,
+                        color,
+                        (
+                            self.x * cell_size + x * cell_size,
+                            self.y * cell_size + y * cell_size,
+                            cell_size,
+                            cell_size,
+                        ),
+                    )
                     inner_color = (255 - color[0], 255 - color[1], 255 - color[2])
-                    inner_rect = (self.x * cell_size + x * cell_size + 0.2 * cell_size,
-                                  self.y * cell_size + y * cell_size + 0.2 * cell_size,
-                                  0.6 * cell_size, 0.6 * cell_size)
+                    inner_rect = (
+                        self.x * cell_size + x * cell_size + 0.2 * cell_size,
+                        self.y * cell_size + y * cell_size + 0.2 * cell_size,
+                        0.6 * cell_size,
+                        0.6 * cell_size,
+                    )
                     pygame.draw.rect(surface, inner_color, inner_rect)
 
     def get_rotated_shape(self):
         shapes = {
-            'S': [
-                [[0, 1, 1],
-                 [1, 1, 0],
-                 [0, 0, 0]],
-                [[0, 1, 0],
-                 [0, 1, 1],
-                 [0, 0, 1]],
-                [[0, 0, 0],
-                 [0, 1, 1],
-                 [1, 1, 0]],
-                [[1, 0, 0],
-                 [1, 1, 0],
-                 [0, 1, 0]]
+            "S": [
+                [[0, 1, 1], [1, 1, 0], [0, 0, 0]],
+                [[0, 1, 0], [0, 1, 1], [0, 0, 1]],
+                [[0, 0, 0], [0, 1, 1], [1, 1, 0]],
+                [[1, 0, 0], [1, 1, 0], [0, 1, 0]],
             ],
-
-            'T': [
-                [[0, 1, 0],
-                 [1, 1, 1],
-                 [0, 0, 0]],
-                [[0, 1, 0],
-                 [0, 1, 1],
-                 [0, 1, 0]],
-                [[0, 1, 0],
-                 [1, 1, 0],
-                 [0, 1, 0]],
-                [[0, 0, 0],
-                 [1, 1, 1],
-                 [0, 1, 0]],
+            "T": [
+                [[0, 1, 0], [1, 1, 1], [0, 0, 0]],
+                [[0, 1, 0], [0, 1, 1], [0, 1, 0]],
+                [[0, 1, 0], [1, 1, 0], [0, 1, 0]],
+                [[0, 0, 0], [1, 1, 1], [0, 1, 0]],
             ],
-
-            'L': [
-                [[0, 0, 1],
-                 [1, 1, 1],
-                 [0, 0, 0]],
-                [[0, 1, 0],
-                 [0, 1, 0],
-                 [0, 1, 1]],
-                [[0, 0, 0],
-                 [1, 1, 1],
-                 [1, 0, 0]],
-                [[1, 1, 0],
-                 [0, 1, 0],
-                 [0, 1, 0]]
+            "L": [
+                [[0, 0, 1], [1, 1, 1], [0, 0, 0]],
+                [[0, 1, 0], [0, 1, 0], [0, 1, 1]],
+                [[0, 0, 0], [1, 1, 1], [1, 0, 0]],
+                [[1, 1, 0], [0, 1, 0], [0, 1, 0]],
             ],
-
-            'I': [
-                [[1, 1, 1, 1],
-                 [0, 0, 0, 0],
-                 [0, 0, 0, 0],
-                 [0, 0, 0, 0]],
+            "I": [
+                [[1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
                 [[1], [1], [1], [1]],
-                [[1, 1, 1, 1],
-                 [0, 0, 0, 0],
-                 [0, 0, 0, 0],
-                 [0, 0, 0, 0]],
-                [[1], [1], [1], [1]]
+                [[1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+                [[1], [1], [1], [1]],
             ],
-
-
-            'R': [
+            "R": [
                 [[1, 1], [1, 1]],
                 [[1, 1], [1, 1]],
                 [[1, 1], [1, 1]],
-                [[1, 1], [1, 1]]
+                [[1, 1], [1, 1]],
             ],
-
-
         }
 
         return shapes[self.shape][self.rotation]
@@ -145,7 +118,7 @@ class Tetromino:
                     grid_y = self.y + y
                     grid_x = self.x + x
                     if 0 <= grid_y < GRID_HEIGHT and 0 <= grid_x < GRID_WIDTH:
-                        grid[grid_y][grid_x] = {'color': tetromino_colors[self.shape]}
+                        grid[grid_y][grid_x] = {"color": tetromino_colors[self.shape]}
 
     def can_move(self, grid, dx=0, dy=0, rotation=None):
         if rotation is None:
@@ -158,9 +131,15 @@ class Tetromino:
         for y, row in enumerate(shape):
             for x, cell in enumerate(row):
                 if cell:
-                    if future_x + x < 0 or future_x + x >= GRID_WIDTH \
-                            or future_y + y >= GRID_HEIGHT \
-                            or (future_y + y < GRID_HEIGHT and grid[future_y + y][future_x + x]):
+                    if (
+                        future_x + x < 0
+                        or future_x + x >= GRID_WIDTH
+                        or future_y + y >= GRID_HEIGHT
+                        or (
+                            future_y + y < GRID_HEIGHT
+                            and grid[future_y + y][future_x + x]
+                        )
+                    ):
                         self.rotation = rotation
                         return False
         self.rotation = rotation
@@ -173,7 +152,7 @@ def main():
     score = 0
     grid = [[0 for _ in range(GRID_WIDTH)] for _ in range(GRID_HEIGHT)]
     current_tetromino = Tetromino(random.choice(list(tetromino_colors.keys())))
-    fall_speed = profile_data.get('fall_speed', 1.0) * 1000
+    fall_speed = profile_data.get("fall_speed", 1.0) * 1000
     last_fall_time = pygame.time.get_ticks()
 
     while True:
@@ -195,11 +174,13 @@ def main():
         if current_time - last_fall_time > fall_speed:
             if not current_tetromino.drop(grid):
                 score = clear_full_rows(grid, score)
-                current_tetromino = Tetromino(random.choice(list(tetromino_colors.keys())))
+                current_tetromino = Tetromino(
+                    random.choice(list(tetromino_colors.keys()))
+                )
                 if not current_tetromino.can_move(grid):
                     show_game_over(window, score)
-                    #profile_data['loses_count'] += 1
-                    #save_config(profile_data)
+                    # profile_data['loses_count'] += 1
+                    # save_config(profile_data)
             last_fall_time = current_time
 
         window.fill(BLACK)
@@ -224,8 +205,11 @@ def draw_grid(surface, grid):
     for y, row in enumerate(grid):
         for x, cell in enumerate(row):
             if cell:
-                color = cell['color']
-                pygame.draw.rect(surface, color, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+                color = cell["color"]
+                pygame.draw.rect(
+                    surface, color, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+                )
+
 
 def show_game_over(surface, score):
     game_over_text = font.render("GAME OVER!", True, WHITE)
@@ -233,42 +217,66 @@ def show_game_over(surface, score):
     restart_text = font.render("Press R to Restart", True, WHITE)
     exit_text = font.render("Press Q to Quit", True, WHITE)
     config = load_config()
-    config['loses_count'] += 1
-    if config['high_score'] < score:
-        config['high_score'] = score
-    if config['loses_count'] == 1:
+    config["loses_count"] += 1
+    if config["high_score"] < score:
+        config["high_score"] = score
+    if config["loses_count"] == 1:
         config["achievements"]["Lose 1 game"] = True
-    if config['loses_count'] == 10:
+    if config["loses_count"] == 10:
         config["achievements"]["Lose 10 games"] = True
-    if config['high_score'] >= 1000:
+    if config["high_score"] >= 1000:
         config["achievements"]["Get 1000 score"] = True
-    if config['high_score'] >= 5000:
+    if config["high_score"] >= 5000:
         config["achievements"]["Get 5000 score"] = True
     save_config(config)
     surface.fill(BLACK)
-    surface.blit(game_over_text, (WINDOW_WIDTH // 2 - game_over_text.get_width()
-                                  // 2, WINDOW_HEIGHT // 2 - game_over_text.get_height() // 2 - 30))
-    surface.blit(score_text, (WINDOW_WIDTH // 2 - score_text.get_width()
-                              // 2, WINDOW_HEIGHT // 2 - score_text.get_height() // 2 + 10))
-    surface.blit(restart_text, (WINDOW_WIDTH // 2 - restart_text.get_width()
-                                // 2, WINDOW_HEIGHT // 2 - restart_text.get_height() // 2 + 50))
-    surface.blit(exit_text, (WINDOW_WIDTH // 2 - exit_text.get_width()
-                             // 2, WINDOW_HEIGHT // 2 - exit_text.get_height() // 2 + 70))
+    surface.blit(
+        game_over_text,
+        (
+            WINDOW_WIDTH // 2 - game_over_text.get_width() // 2,
+            WINDOW_HEIGHT // 2 - game_over_text.get_height() // 2 - 30,
+        ),
+    )
+    surface.blit(
+        score_text,
+        (
+            WINDOW_WIDTH // 2 - score_text.get_width() // 2,
+            WINDOW_HEIGHT // 2 - score_text.get_height() // 2 + 10,
+        ),
+    )
+    surface.blit(
+        restart_text,
+        (
+            WINDOW_WIDTH // 2 - restart_text.get_width() // 2,
+            WINDOW_HEIGHT // 2 - restart_text.get_height() // 2 + 50,
+        ),
+    )
+    surface.blit(
+        exit_text,
+        (
+            WINDOW_WIDTH // 2 - exit_text.get_width() // 2,
+            WINDOW_HEIGHT // 2 - exit_text.get_height() // 2 + 70,
+        ),
+    )
     pygame.display.flip()
     wait_for_player_to_press_r_or_q()
 
 
-
-'''
+"""
 def show_victory(surface, score):
     victory_text = font.render("CONGRATULATIONS!", True, WHITE)
     score_text = font.render(f"Your Score: {score}", True, WHITE)
 
     surface.fill(BLACK)
-    surface.blit(victory_text, (WINDOW_WIDTH // 2 - victory_text.get_width() // 2, WINDOW_HEIGHT // 2 - victory_text.get_height() // 2 - 30))
-    surface.blit(score_text, (WINDOW_WIDTH // 2 - score_text.get_width() // 2, WINDOW_HEIGHT // 2 - score_text.get_height() // 2 + 10))
+    surface.blit(victory_text, (WINDOW_WIDTH // 2 - 
+    victory_text.get_width() // 2, WINDOW_HEIGHT // 2 - 
+    victory_text.get_height() // 2 - 30))
+    surface.blit(score_text, (WINDOW_WIDTH // 2 - 
+    score_text.get_width() // 2, WINDOW_HEIGHT // 2 -
+     score_text.get_height() // 2 + 10))
     pygame.display.flip()
-'''
+"""
+
 
 def wait_for_player_to_press_r_or_q():
     while True:

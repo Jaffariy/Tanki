@@ -33,9 +33,10 @@ class Button:
         center_x = (WIDTH - btn_image.get_width()) // 2
         screen.blit(btn_image, (center_x, self.y))
         text_surface = font.render(self.text, True, BLACK if achieved else GRAY)
-        text_rect = text_surface.get_rect(center=(center_x + btn_image.get_width() // 2, self.y + self.height // 2))
+        text_rect = text_surface.get_rect(
+            center=(center_x + btn_image.get_width() // 2, self.y + self.height // 2)
+        )
         screen.blit(text_surface, text_rect)
-
 
 
 class BackButton:
@@ -51,7 +52,9 @@ class BackButton:
         pygame.draw.rect(screen, BLACK, (self.x, self.y, self.width, self.height), 2)
 
         text_surface = font.render(self.text, True, BLACK)
-        text_rect = text_surface.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
+        text_rect = text_surface.get_rect(
+            center=(self.x + self.width // 2, self.y + self.height // 2)
+        )
         screen.blit(text_surface, text_rect)
 
 
@@ -59,7 +62,7 @@ achievements = [
     Button("Lose 1 game", 50, 100, "Lose 1 game"),
     Button("Lose 10 games", 50, 200, "Lose 10 games"),
     Button("Get 1000 score", 50, 300, "Get 1000 score"),
-    Button("Get 5000 score", 50, 400, "Get 5000 score")
+    Button("Get 5000 score", 50, 400, "Get 5000 score"),
 ]
 
 
@@ -82,8 +85,10 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            if back_button.x < mouse_x < back_button.x + back_button.width and \
-                    back_button.y < mouse_y < back_button.y + back_button.height:
+            if (
+                back_button.x < mouse_x < back_button.x + back_button.width
+                and back_button.y < mouse_y < back_button.y + back_button.height
+            ):
                 exec(open("main.py").read())
     screen.fill(WHITE)
     screen.blit(frames[current_frame], (0, 0))

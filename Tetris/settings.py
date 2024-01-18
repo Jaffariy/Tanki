@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Settings menu")
 font = pygame.font.Font(None, 36)
 config = load_config()
-FALL_SPEED = config['fall_speed']
+FALL_SPEED = config["fall_speed"]
 
 
 class Button:
@@ -29,7 +29,9 @@ class Button:
         pygame.draw.rect(screen, BLACK, (self.x, self.y, self.width, self.height), 2)
 
         text_surface = font.render(self.text, True, BLACK)
-        text_rect = text_surface.get_rect(center=(self.x + self.width // 2, self.y + self.height // 2))
+        text_rect = text_surface.get_rect(
+            center=(self.x + self.width // 2, self.y + self.height // 2)
+        )
         screen.blit(text_surface, text_rect)
 
 
@@ -77,12 +79,17 @@ def view_profile_stats():
         stats_box = pygame.Rect(100, HEIGHT // 2 - 100, 600, 200)
         pygame.draw.rect(screen, WHITE, stats_box, 2)
         name_text = font.render("Name: " + config["profile_name"], True, WHITE)
-        high_score_text = font.render("High Score: " + str(config["high_score"]), True, WHITE)
-        loss_count = font.render("Loss count: " + str(config["loses_count"]), True, WHITE)
+        high_score_text = font.render(
+            "High Score: " + str(config["high_score"]), True, WHITE
+        )
+        loss_count = font.render(
+            "Loss count: " + str(config["loses_count"]), True, WHITE
+        )
         screen.blit(name_text, (100, HEIGHT // 3))
         screen.blit(high_score_text, (100, HEIGHT // 2))
         screen.blit(loss_count, (100, HEIGHT // 2 + 40))
         pygame.display.flip()
+
 
 class Slider:
     def __init__(self, x, y, w, h, min_val, max_val, init_val, step):
@@ -94,7 +101,9 @@ class Slider:
         self.active = False
 
     def draw(self):
-        handle_x = ((self.val - self.min_val) / (self.max_val - self.min_val)) * (self.rect.width - 20) + self.rect.x
+        handle_x = ((self.val - self.min_val) / (self.max_val - self.min_val)) * (
+            self.rect.width - 20
+        ) + self.rect.x
         pygame.draw.rect(screen, GREY, self.rect, 3)
         pygame.draw.rect(screen, WHITE, [handle_x, self.rect.y, 20, self.rect.height])
 
@@ -114,11 +123,14 @@ class Slider:
                     handle_x = 0
                 if handle_x > self.rect.width - 20:
                     handle_x = self.rect.width - 20
-                self.val = ((handle_x / (self.rect.width - 20)) * (self.max_val - self.min_val) + self.min_val)
+                self.val = (handle_x / (self.rect.width - 20)) * (
+                    self.max_val - self.min_val
+                ) + self.min_val
                 self.val = round(self.val / self.step) * self.step
 
     def getValue(self):
         return self.val
+
 
 edit_name_button = Button("Edit Name", WIDTH // 2 - 100, 300)
 stats_button = Button("View Stats", WIDTH // 2 - 100, 360)
@@ -152,20 +164,32 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            if back_button.x < mouse_x < back_button.x + back_button.width and \
-                    back_button.y < mouse_y < back_button.y + back_button.height:
+            if (
+                back_button.x < mouse_x < back_button.x + back_button.width
+                and back_button.y < mouse_y < back_button.y + back_button.height
+            ):
                 exec(open("main.py").read())
-            if edit_name_button.x < mouse_x < edit_name_button.x + edit_name_button.width and \
-                    edit_name_button.y < mouse_y < edit_name_button.y + edit_name_button.height:
+            if (
+                edit_name_button.x
+                < mouse_x
+                < edit_name_button.x + edit_name_button.width
+                and edit_name_button.y
+                < mouse_y
+                < edit_name_button.y + edit_name_button.height
+            ):
                 edit_profile_name()
-            elif stats_button.x < mouse_x < stats_button.x + stats_button.width and \
-                    stats_button.y < mouse_y < stats_button.y + stats_button.height:
+            elif (
+                stats_button.x < mouse_x < stats_button.x + stats_button.width
+                and stats_button.y < mouse_y < stats_button.y + stats_button.height
+            ):
                 view_profile_stats()
-            elif save_speed.x < mouse_x < save_speed.x + save_speed.width and \
-                    save_speed.y < mouse_y < save_speed.y + save_speed.height:
+            elif (
+                save_speed.x < mouse_x < save_speed.x + save_speed.width
+                and save_speed.y < mouse_y < save_speed.y + save_speed.height
+            ):
                 FALL_SPEED = slider.getValue()
                 config = load_config()
-                config['fall_speed'] = FALL_SPEED
+                config["fall_speed"] = FALL_SPEED
                 save_config(config)
 
         slider.update(event)
@@ -184,7 +208,6 @@ while running:
 
     pygame.display.flip()
     clock.tick(30)
-
 
 
 pygame.quit()
